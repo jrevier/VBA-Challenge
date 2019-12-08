@@ -1,0 +1,30 @@
+Sub ticker()
+For Each ws In Worksheets
+'Establish variables
+    Dim ticker As String
+    Dim volume As Double
+        volume = 0
+    Dim yearly_change As Double
+    
+    Dim per_change As Integer
+    Summary_Table_Row = 2
+    lastrow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+    'Loop through data
+    For i = 2 To lastrow
+    If Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
+    ticker = Cells(i, 1).Value
+    volume = volume + Cells(i, 7).Value
+        Range("K" & Summary_Table_Row).Value = ticker
+        Range("L" & Summary_Table_Row).Value = volume
+        Summary_Table_Row = Summary_Table_Row + 1
+        volume = 0
+        Else
+        volume = volume + Cells(i, 7).Value
+        
+  End If
+  Next i
+  Next ws
+  
+   
+
+End Sub
