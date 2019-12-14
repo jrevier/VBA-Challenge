@@ -1,4 +1,5 @@
 Sub ticker()
+'Loop through Worksheets
 For Each WS In Worksheets
 For Each sht In ThisWorkbook.Worksheets
     sht.Cells.EntireColumn.AutoFit
@@ -8,6 +9,9 @@ WS.Range("K1") = "Ticker Symbol"
 WS.Range("L1") = "Yearly Change"
 WS.Range("M1") = "Percent Change"
 WS.Range("N1") = "Total Volume"
+WS.Range("P2").Value = "Greatest Percent Increase"
+WS.Range("P3").Value = "Greatest Percent Decrease"
+WS.Range("P4").Value = "Greatest Total Volume"
 'Establish variables
     Dim ticker As String
     Dim volume As Double
@@ -27,8 +31,9 @@ WS.Range("N1") = "Total Volume"
     yr_close = WS.Cells(i, 6).Value
     yearly_change = yr_close - yr_open
         WS.Range("K" & Summary_Table_Row).Value = ticker
+        WS.Range("L" & Summary_Table_Row).Value = yearly_change
        WS.Range("N" & Summary_Table_Row).Value = volume
-       WS.Range("L" & Summary_Table_Row).Value = yearly_change
+       
         If yr_open = 0 Then
                     WS.Range("M" & Summary_Table_Row).Value = 0
     Else
@@ -44,8 +49,9 @@ WS.Range("N1") = "Total Volume"
             WS.Range("L" & Summary_Table_Row).Interior.ColorIndex = 3
             
          End If
-         'Reset volume and add to summary row
+         'Reset volume, format cells and add to summary row
             WS.Range("M" & Summary_Table_Row).NumberFormat = "0.00%"
+            WS.Range("N").NumberFormat = "#,###"
              volume = 0
              Summary_Table_Row = Summary_Table_Row + 1
              yr_openrow = i + 1
@@ -54,6 +60,21 @@ WS.Range("N1") = "Total Volume"
         
   End If
   Next i
+'Challenge
+'Establish variables
+Dim GPI As Double
+Dim GPD As Double
+Dim GTV As Double
+'Find Mins and Maxes in WS
+ GPI = WorksheetFunction.Max(WS.Range("M2:M1000"))
+ GPD = WorksheetFunction.Min(WS.Range("M2:M1000"))
+ GTV = WorksheetFunction.Max(WS.Range("N2:N1000"))
+ WS.Range("Q2").Value = GPI
+ WS.Range("Q3").Value = GPD
+  WS.Range("Q4").Value = GTV
+  'Format cells
+ WS.Range("Q2:Q3").NumberFormat = "0.00%"
+ WS.Range("Q4").NumberFormat = "#,###"
   Next WS
 
 End Sub
