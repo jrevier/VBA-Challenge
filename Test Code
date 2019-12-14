@@ -1,33 +1,52 @@
 Sub ticker()
 For Each WS In Worksheets
+For Each sht In ThisWorkbook.Worksheets
+    sht.Cells.EntireColumn.AutoFit
+  Next sht
+'make headers
+WS.Range("K1") = "Ticker Symbol"
+WS.Range("L1") = "Yearly Change"
+WS.Range("M1") = "Percent Change"
+WS.Range("N1") = "Total Volume"
 'Establish variables
     Dim ticker As String
     Dim volume As Double
         volume = 0
     Dim yearly_change As Double
-    
     Dim per_change As Integer
     Summary_Table_Row = 2
     yr_openrow = 2
     lastrow = WS.Cells(Rows.Count, 1).End(xlUp).Row
     'Loop through data
     For i = 2 To lastrow
-    yr_open = Cells(yr_openrow, 3).Value
-    volume = volume + Cells(i, 7).Value
-    If Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
-    ticker = Cells(i, 1).Value
-    yr_close = Cells(i, 6).Value
+    yr_open = WS.Cells(yr_openrow, 3).Value
+    volume = volume + WS.Cells(i, 7).Value
+    'Track ticker changes
+    If WS.Cells(i + 1, 1).Value <> WS.Cells(i, 1).Value Then
+    ticker = WS.Cells(i, 1).Value
+    yr_close = WS.Cells(i, 6).Value
     yearly_change = yr_close - yr_open
-        Range("K" & Summary_Table_Row).Value = ticker
-        Range("N" & Summary_Table_Row).Value = volume
-        Range("L" & Summary_Table_Row).Value = yearly_change
+        WS.Range("K" & Summary_Table_Row).Value = ticker
+       WS.Range("N" & Summary_Table_Row).Value = volume
+       WS.Range("L" & Summary_Table_Row).Value = yearly_change
         If yr_open = 0 Then
-                    Range("M" & Summary_Table_Row).Value = 0
+                    WS.Range("M" & Summary_Table_Row).Value = 0
     Else
-         per_change = yearly_change / yr_open
-         Range("M" & Summary_Table_Row).Value = per_change
-                End If
-             Range("N" & Summary_Table_Row).Value = volume
+         WS.Range("M" & Summary_Table_Row).Value = yearly_change / yr_open
+   End If
+   
+             WS.Range("N" & Summary_Table_Row).Value = volume
+    'Format Cells if positive or negative
+        If WS.Range("L" & Summary_Table_Row).Value > 0 Then
+            WS.Range("L" & Summary_Table_Row).Interior.ColorIndex = 4
+            
+        ElseIf WS.Range("L" & Summary_Table_Row).Value < 0 Then
+            WS.Range("L" & Summary_Table_Row).Interior.ColorIndex = 3
+            
+         End If
+         'Reset volume and add to summary row
+            WS.Range("M" & Summary_Table_Row).NumberFormat = "0.00%"
+             volume = 0
              Summary_Table_Row = Summary_Table_Row + 1
              yr_openrow = i + 1
         
@@ -38,4 +57,3 @@ For Each WS In Worksheets
   Next WS
 
 End Sub
-
