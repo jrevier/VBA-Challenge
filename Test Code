@@ -51,7 +51,7 @@ WS.Range("P4").Value = "Greatest Total Volume"
          End If
          'Reset volume, format cells and add to summary row
             WS.Range("M" & Summary_Table_Row).NumberFormat = "0.00%"
-            WS.Range("N").NumberFormat = "#,###"
+            
              volume = 0
              Summary_Table_Row = Summary_Table_Row + 1
              yr_openrow = i + 1
@@ -66,15 +66,19 @@ Dim GPI As Double
 Dim GPD As Double
 Dim GTV As Double
 'Find Mins and Maxes in WS
- GPI = WorksheetFunction.Max(WS.Range("M2:M1000"))
- GPD = WorksheetFunction.Min(WS.Range("M2:M1000"))
- GTV = WorksheetFunction.Max(WS.Range("N2:N1000"))
- WS.Range("Q2").Value = GPI
- WS.Range("Q3").Value = GPD
-  WS.Range("Q4").Value = GTV
+ GPI = WorksheetFunction.Max(WS.Range("M2:M4000"))
+
+ GPD = WorksheetFunction.Min(WS.Range("M2:M4000"))
+ 
+ GTV = WorksheetFunction.Max(WS.Range("N2:N4000"))
+
+ 
+ WS.Range("R2").Value = GPI
+ WS.Range("R3").Value = GPD
+  WS.Range("R4").Value = GTV
   'Format cells
- WS.Range("Q2:Q3").NumberFormat = "0.00%"
- WS.Range("Q4").NumberFormat = "#,###"
+ WS.Range("R2:R3").NumberFormat = "0.00%"
+ WS.Range("R4").NumberFormat = "#,###"
   Next WS
 
 End Sub
